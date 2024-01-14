@@ -5,7 +5,7 @@ import { JWT_SECRET } from './config'
 export const tokenSign = async (user : any) =>{
     const sign = jwt.sign(
         {
-            _id: user.id,
+            id: user.id,
             role: user.role
         },
         JWT_SECRET,

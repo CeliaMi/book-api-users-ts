@@ -9,7 +9,8 @@ const UserController = {
     },
     async getUser(req : Request, res : Response){
         const userId : any  = req.params.id
-        const user = await userModel.findOne(userId);
+        console.log(userId)
+        const user = await userModel.findByPk(userId);
         return res.json(user)
     },
 
