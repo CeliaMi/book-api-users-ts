@@ -1,52 +1,63 @@
-import mysql from "mysql2/promise"
+import db from "../database/db";
+import { DataTypes, Model } from "sequelize";
 
-const CONFIG : object = {
-    host: 'localhost',
-    database: '',
-    user: 'root',
-    password: 'root',
-    port: 3306
+interface UserAttributes {
+    id?: number;
+    name: string;
+    email: string,
+    password: string;
+    role: string,
 }
 
-async function connectionDb(){
-    try{
-    const connection = await mysql.createConnection(CONFIG);
-    return connection;
-    } catch(error) {
-        console.log(error)
-    }
-}
+interface UserModel extends Model<UserAttributes>, UserAttributes{}
 
-const UserModel = {
+const UserModel = db.define<UserModel>('users', {
 
-
-
-    async getUsers(){
-        // SELECT * FROM user;
-        const connection = await connectionDb();
-        const users = connection?.query('SELECT * FROM user')
-        return users
-
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'el campo name no puede estar vacío'
+            },
+        }
     },
-    async getUser(userId: number){
-        // SELECT * FROM user WHERE id = userId;
-        const connection = await connectionDb();
-        const users = connection?.query(`SELECT * FROM user  WHERE id = ${userId}`)
-        return users
-
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'el campo email no puede estar vacío'
+            },
+        }
     },
-    async createUser(bodyData : object){
-        // INSERT INTO user (name, email, role, password) VALUES();
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'el campo password no puede estar vacío'
+            },
 
+        }
     },
-    async updateUser(userId : number , bodyData : object){
-        //UPDATE user SET name=?, email = ?, role = ? , password = ? ,WHERE id = userId;
+    role: {
+        type: DataTypes.STRING,
+        defaultValue : 'user',
+    },
+    
 
-    },
-    async deleteUser(userId: number){
-        //DELETE FROM user WHERE id = userID;
-
-    },
-}
+}, {
+    timestamps: false
+});
+(async () => {
+    await db.sync();
+    console.log("All models were synchronized successfully.");
+})();
 
 export default UserModel
