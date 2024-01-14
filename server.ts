@@ -3,6 +3,7 @@ import {PORT} from "./utils/config";
 import db from "./database/db"
 import userRouter from './routes/UserRouter';
 import cors from 'cors'
+import { bookRouter } from './routes/BookRouter';
 
 
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 app.use('/api/',userRouter)
+app.use('/api/',bookRouter)
 
 
 try{
