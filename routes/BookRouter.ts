@@ -9,8 +9,8 @@ export const bookRouter = express.Router();
 
 // es importante poner *checkRol()* después del authMiddleware porque primero necesita que llegen los datos para después chequearlos
 
-bookRouter.get('/books', authMiddleware, checkRol(["user"]), getAllUserBooks)
-bookRouter.get('/books/:id', authMiddleware, checkRol(["user"]), getBook)
+bookRouter.get('/books', authMiddleware, checkRol(["user", "admin"]), getAllUserBooks)
+bookRouter.get('/books/:id', authMiddleware, checkRol(["user","admin"]), getBook)
 bookRouter.get('/Allbooks', authMiddleware, checkRol(["admin"]), getAllBooks)
 bookRouter.post('/books', authMiddleware, checkRol(["user","admin"]), createBook)
 bookRouter.put('/books/:id', authMiddleware, checkRol(["user","admin"]), updateBook)
