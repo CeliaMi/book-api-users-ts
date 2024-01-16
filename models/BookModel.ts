@@ -72,9 +72,9 @@ const BookModel = db.define('books', {
 }, {
     timestamps: false
 });
-(async () => {
-    await db.sync();
-    console.log("All models were synchronized successfully.");
-})();
+// (async () => {
+//     await db.sync();
+//     console.log("All models were synchronized successfully.");
+// })();
 
 export default BookModel

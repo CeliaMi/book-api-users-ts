@@ -24,6 +24,7 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
      }
     res.send({sesiondata})
     } catch(error){
+        console.log(error)
         handleHttpError(res, "ERROR_REGISTER_USER")
     }
 } 
@@ -60,3 +61,14 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
     }
 
 }
+
+// export const checkUser = async (req: Request, res: Response) => {
+//     try {
+//         const jwtByUser = req.headers.authorization || "";
+//         const jwt = jwtByUser.split(" ").pop() || "";
+//         const userData = await checkUserFromJwt(jwt);
+//         return res.json(userData);
+//     }catch (e) {
+//         console.log(e);
+//     }
+// }

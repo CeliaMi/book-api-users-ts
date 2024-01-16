@@ -6,7 +6,7 @@ interface UserAttributes {
     name: string;
     email: string,
     password: string;
-    role: string,
+    role?: string,
 }
 
 interface UserModel extends Model<UserAttributes>, UserAttributes{}
