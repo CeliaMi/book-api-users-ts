@@ -1,22 +1,14 @@
 import db from "../database/db";
 import { DataTypes, Model } from "sequelize";
+import { BookAttributes } from "../interfaces/bookInterface";
 
 
-interface BookAttributes {
-    id?: number;
-    title: string;
-    writer: string;
-    book_description: string;
-    id_user: number;
-  }
-
-  
 // interface ValidationMsg {
 //     msg: string;
 //     args?: readonly [number, number] | { min?: number; max?: number; msg: string };
 //   }
 
-interface BookModel extends Model<BookAttributes>, BookAttributes{}
+ interface BookModel extends Model<BookAttributes>, BookAttributes{}
 
 const BookModel = db.define('books', {
 

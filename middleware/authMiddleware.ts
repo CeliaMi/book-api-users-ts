@@ -1,6 +1,6 @@
 import { handleHttpError } from '../utils/handleError'
 import { verifyToken } from '../utils/handlejwt'
-import  UserScheme  from '../models/UserModel'
+import   UserModel  from '../models/UserModel'
 import { Request, Response, NextFunction } from "express";
 
 export const authMiddleware = async(req: Request, res : Response, next: NextFunction) => {
@@ -15,7 +15,7 @@ export const authMiddleware = async(req: Request, res : Response, next: NextFunc
 
         //con el handle que hemos creado *verifyToken()* ( que utiliza de la librería jwt) verificamos que es un token
         const dataToken :any  = await verifyToken(token);
-        const userId :any = <number>dataToken.id
+        const userId  = <number>dataToken.id
         // nuestra firma de token *tokenSign()* necesita un id para funcionar verificamos que esta y si no error.
         if(!userId){
             handleHttpError(res, "ERROR_ID_TOKEN", 401);
@@ -25,7 +25,7 @@ export const authMiddleware = async(req: Request, res : Response, next: NextFunc
 
         //además de para saber el rol, hacer esto nos permite tener un control de trazabilidad, es decir, saber que usuario ha hecho cada petición.
 
-        const user = <UserScheme> await  UserScheme.findByPk(dataToken.id)
+        const user = await  UserModel.findOne({ where: { id: req.params.id } })
         req.body.user = user
 
         //si todo da ok que avance al paso siguiente

@@ -1,9 +1,10 @@
 import { encrypt, compare } from "../utils/handlePassword";
 import userModel from "../models/UserModel";
-//import { tokenSign } from "../utils/handleJwt.js";
 import { handleHttpError } from "../utils/handleError";
 import { Request, Response } from "express";
 import { tokenSign, } from "../utils/handlejwt";
+import {sesionData, newUser, UserAttributes} from  "../interfaces/userInterface"
+import { Model } from "sequelize";
 
 
 
@@ -12,17 +13,20 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
     const data = req.body
     const newPassword = data.password
     const passwordHash = await encrypt(newPassword)
-    const newUser = {...data, password: passwordHash}
+    const newUser : newUser = {...data, password: passwordHash}
     console.log(newUser) 
-    const dataUser = await userModel.create(newUser)
-    //esta línea evita que se vea expuesto el hash de la contraseña👇
-    //dataUser.set('password', undefined, { strict:false})
+    const dataUser: Model<UserAttributes> = await userModel.create(newUser)
 
-     const sesiondata = {
-        token: await tokenSign(dataUser),
-        user:dataUser
-     }
+    ///💥ATENCION HE DEJADO AQUÍ UN MALDITO ANY PERO ESTO ME SUPERAAAA AAAAAHHHHH!!!!
+    //TE ODIOOOOOOOOO
+    //  dataUser.set('password', undefined, { strict:false})
+        const sesiondata : sesionData = {
+           token: await tokenSign(dataUser),
+           user:dataUser
+        }
+
     res.send({sesiondata})
+        
     } catch(error){
         console.log(error)
         handleHttpError(res, "ERROR_REGISTER_USER")
@@ -34,22 +38,21 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
         //req = matchedData(req);
         const userEmail = req.body.email
         const loginPassword = req.body.password
-        console.log(userEmail)
         const user :any  = await userModel.findOne ({where: {email: userEmail}});
+        //💥OTRO ANY POR AQUÍII
         if(!user){
             handleHttpError(res, "USER_NOT_EXISTS", 404)
         }
 
         const hashPassword : string = user.password;
-        console.log(hashPassword)
         const check = await compare(loginPassword, hashPassword)
 
         if(!check){
             handleHttpError(res, "PASSWORD_INVALID", 401)
         }
-        //user.set('password', undefined, {strict:false})
+        user.set('password', undefined, {strict:false})
 
-        const sesiondata = {
+        const sesiondata : sesionData = {
             token: await tokenSign(user),
             user:user
          }
@@ -62,13 +65,3 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
 
 }
 
-// export const checkUser = async (req: Request, res: Response) => {
-//     try {
-//         const jwtByUser = req.headers.authorization || "";
-//         const jwt = jwtByUser.split(" ").pop() || "";
-//         const userData = await checkUserFromJwt(jwt);
-//         return res.json(userData);
-//     }catch (e) {
-//         console.log(e);
-//     }
-// }

@@ -1,17 +1,11 @@
 import db from "../database/db";
 import { DataTypes, Model } from "sequelize";
+import  { UserAttributes }  from '../interfaces/userInterface'
 
-interface UserAttributes {
-    id?: number;
-    name: string;
-    email: string,
-    password: string;
-    role?: string,
-}
 
-interface UserModel extends Model<UserAttributes>, UserAttributes{}
+export interface UserModel extends Model<UserAttributes>, UserAttributes{}
 
-const UserModel = db.define<UserModel>('users', {
+const UserModel = db.define('users', {
 
     id: {
         type: DataTypes.INTEGER,
