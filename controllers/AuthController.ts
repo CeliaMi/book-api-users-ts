@@ -36,11 +36,11 @@ export const registerController =  async(req:Request, res:Response): Promise<Res
  export const loginController = async(req:Request, res:Response): Promise<Response | void> =>{
     try{
         //req = matchedData(req);
-        const userEmail = req.body.email
-        const loginPassword = req.body.password
-        const user :any  = await userModel.findOne ({where: {email: userEmail}});
+        const userEmail : string = req.body.email
+        const loginPassword : string = req.body.password
+        const user : any = await userModel.findOne ({where: {email: userEmail}});
         //💥OTRO ANY POR AQUÍII
-        if(!user){
+        if(user === null){
             handleHttpError(res, "USER_NOT_EXISTS", 404)
         }
 
